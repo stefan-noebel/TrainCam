@@ -55,13 +55,21 @@ Fork des Projekts [s60sc/ESP32-CAM_MJPEG2SD](https://github.com/s60sc/ESP32-CAM_
 9. Videodateien in gängige und archivierbare Formate umwandeln:
 
     In den erzeugten .avi-Dateien liegen die Video- und Audiostreams als Rohdaten vor:
+
+    ```
     
     Video: mjpeg (Baseline) (MJPG / 0x47504A4D), yuvj422p(pc, bt470bg/unknown/unknown), 1280x720, 17295 kb/s, 23 fps, 23 tbr, 23 tbn, 23 tbc
-    Audio: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 16000 Hz, mono, s16, 256 kb/s 
+    Audio: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 16000 Hz, mono, s16, 256 kb/s
+
+    ```
     
     Diese können noch deutlich komprimiert werden. Dafür fehlt dem verwendeten ESP32S3 die nötige Rechenleistung. Am einfachsten ist es per Kommandozeile mit dem Programm ffmpeg
     
+    ```
+
     for i in *.avi; do ffmpeg -i "$i" -filter:v "scale=-1:720" -vcodec libx264 -profile:v baseline -level 3.0 -pix_fmt yuv420p -acodec libfdk_aac "${i%.avi}_libx264_720p.mp4"; done
+
+    ```
     
     Das Ausgabeformat ist gut archivierbar und WhatsApp-tauglich. Mit dem VLC media player können die Datein ebenfalls geöffnet und konvertiert werden: Medien -> Konvertieren/Speichern -> Hinzufügen -> .avi-Datei(en) auswählen -> Konvertieren/Speichern -> Einstellungen: `Konvertieren`: *Video - H.264 + MP3 (MP4)* -> Zieldatei: Durchsuchen -> Dateiname auf .mp4 ändern -> Speichern -> Start
 
